@@ -1,0 +1,43 @@
+.card {
+  padding: 1.5rem;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #181818;
+}
+
+.title {
+  margin-top: 0;
+}
+
+.link {
+  color: #6cf;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.card,
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.image {
+  width: 170px;
+  height: 30%;
+
+  object-fit: cover;
+  border-radius: 6px;
+
+  margin-bottom: 1rem;
+
+  border: 1px solid var(--border);
+
+  background: #000;
+}

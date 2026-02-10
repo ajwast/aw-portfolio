@@ -1,0 +1,45 @@
+.header {
+  position: sticky;
+  top: 0;
+  background: #14233e;
+  border-bottom: 1px solid #333;
+  z-index: 100;
+}
+
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  color: #eee;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.navButton:hover {
+  color: #6cf;
+}

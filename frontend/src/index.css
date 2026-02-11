@@ -26,6 +26,30 @@ body {
 
   --accent: #22d3ee; /* neon cyan */
   --accent-alt: #f43f5e; /* magenta */
+  --accent-soft: rgba(34, 211, 238, 0.15); /* soft version of accent */
+  
+  /* Spacing system */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 }
 
 main {
@@ -38,24 +62,56 @@ section {
   margin-bottom: 5rem;
 }
 
+/* Base button styles */
 button {
-  margin: 1rem 0;
-  padding: 0.5rem 1rem;
-  background: #2b2b5b;
-  color: #eee;
-  border: 1px solid #444;
+  font-family: inherit;
+  font-weight: var(--font-weight-medium);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
   cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-card);
+  color: var(--text-main);
+  margin: var(--spacing-md) 0;
 }
 
 button:hover {
-  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Primary button variant */
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background: #5ab3e6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.3);
+}
+
+/* Secondary button variant */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .projects-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
 }
 
 a {
@@ -65,13 +121,4 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-button {
-  font-family: inherit;
-  transition: all 0.15s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
 }

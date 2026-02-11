@@ -21,11 +21,11 @@ function Hero() {
         </p>
 
         <div className={styles.actions}>
-          <a href="#projects" className={styles.primary}>
+          <a href="#projects" className="btn-primary">
             View Projects
           </a>
 
-          <a href="#contact" className={styles.secondary}>
+          <a href="#contact" className="btn-secondary">
             Contact Me
           </a>
         </div>

@@ -77,24 +77,12 @@ function App() {
 
       <main>
         <Hero />
-        {/* About toggle */}
-        <button onClick={() => setShowAbout(!showAbout)}>
-          {showAbout ? "Hide" : "Show"} About
-        </button>
-
-        <section ref={skillsRef}>
-          <Skills />
-        </section>
-
-        <section ref={expRef}>
-          <Experience />
-        </section>
 
         {showAbout && (
-          <section ref={aboutRef}>
+          <section ref={aboutRef} id="about">
             <h2>About Me</h2>
             <p>
-              I’m a developer and creative technologist working with music,
+              I'm a developer and creative technologist working with music,
               code, and interactive systems. I have a background in Music
               Production, Audio Engineering, Audio Programming and Education. I
               developed "Deep Steps", a MIDI step sequencer with an integrated
@@ -105,6 +93,21 @@ function App() {
             </p>
           </section>
         )}
+        <button
+          className="btn-secondary"
+          aria-expanded={showAbout}
+          onClick={() => setShowAbout(!showAbout)}
+        >
+          {showAbout ? "Hide" : "Show"} About
+        </button>
+
+        <section ref={skillsRef} id="skills">
+          <Skills />
+        </section>
+
+        <section ref={expRef} id="experience">
+          <Experience />
+        </section>
 
         {/* Projects */}
         <section ref={projectsRef} id="projects">
@@ -112,7 +115,7 @@ function App() {
 
           <div className="projects-grid">
             {projects.map((project, index) => (
-              <ProjectCard key={index} project={project} />
+              <ProjectCard key={project.title} project={project} />
             ))}
           </div>
         </section>

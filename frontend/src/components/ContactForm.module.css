@@ -1,75 +1,61 @@
 .section {
   max-width: 600px;
-  margin: 4rem auto;
-  padding: 2rem;
+  margin: var(--spacing-2xl) auto;
+  padding: var(--spacing-xl);
 
-  border: 1px solid #333;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #161616;
+  background: var(--bg-card);
 }
 
 .heading {
   margin-top: 0;
   text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--spacing-lg);
 }
 
 .label {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--spacing-xs);
 
-  font-size: 0.9rem;
-  color: #ccc;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
 }
 
 .input,
 .textarea {
-  padding: 0.6rem;
+  padding: var(--spacing-sm);
   border-radius: 4px;
-  border: 1px solid #444;
+  border: 1px solid var(--border);
 
-  background: #0f0f0f;
-  color: #eee;
-  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-main);
+  font-size: var(--font-size-base);
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: #6cf;
-}
-
-.button {
-  margin-top: 0.5rem;
-  padding: 0.7rem;
-
-  background: #6cf;
-  color: #000;
-
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.button:hover {
-  background: #5ab3e6;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
 }
 
 .success {
-  margin-bottom: 1rem;
-  padding: 0.6rem;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
 
-  background: rgba(102, 204, 255, 0.15);
-  border: 1px solid #6cf;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
   border-radius: 4px;
 
   text-align: center;
-  color: #6cf;
+  color: var(--accent);
 }

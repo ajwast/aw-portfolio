@@ -29,57 +29,32 @@
 .name {
   margin: 0;
   font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .tagline {
-  margin: 1rem 0 0;
+  margin: var(--spacing-md) 0 0;
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
 }
 
 .description {
   max-width: 600px;
-  margin: 1.5rem auto 2.5rem;
+  margin: var(--spacing-lg) auto var(--spacing-xl) auto;
 
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--font-size-base);
+  line-height: 1.7;
   color: #cfd6e4;
 }
 
 .actions {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--spacing-lg);
   flex-wrap: wrap;
-}
-
-.primary,
-.secondary {
-  padding: 0.7rem 1.4rem;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.15s ease;
-}
-
-.primary {
-  background: var(--accent);
-  color: #000;
-}
-
-.primary:hover {
-  transform: translateY(-1px);
-  background: #5ab3e6;
-}
-
-.secondary {
-  border: 1px solid var(--border);
-  color: var(--text-main);
-}
-
-.secondary:hover {
-  background: rgba(255, 255, 255, 0.04);
 }
 
 .avatar {

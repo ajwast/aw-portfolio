@@ -89,7 +89,7 @@ function ContactForm() {
           />
         </label>
 
-        <button className={styles.button} type="submit">
+        <button className="btn-primary" type="submit">
           Send
         </button>
       </form>

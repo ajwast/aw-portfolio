@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./ContactForm.module.css";
+import { useScrollAnimation } from '../utils/useScrollAnimation';
 
 type FormData = {
   name: string;
@@ -15,6 +16,18 @@ function ContactForm() {
   });
 
   const [submitted, setSubmitted] = useState<boolean>(false);
+
+  useScrollAnimation();
+  
+  useEffect(() => {
+    // Trigger initial animation check when component mounts
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.classList.add('visible');
+      }
+    });
+  }, []);
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -50,14 +63,14 @@ function ContactForm() {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.heading}>Contact</h2>
+      <h2 className={`${styles.heading} animate-on-scroll`}>Contact</h2>
 
       {submitted && (
-        <p className={styles.success}>Thanks! Your message has been sent.</p>
+        <p className={`${styles.success} animate-on-scroll`}>Thanks! Your message has been sent.</p>
       )}
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <label className={styles.label}>
+      <form className={`${styles.form} animate-on-scroll`} style={{ transitionDelay: '0.2s' }} onSubmit={handleSubmit}>
+        <label className={`${styles.label} animate-on-scroll`} style={{ transitionDelay: '0.3s' }}>
           Name
           <input
             className={styles.input}
@@ -68,7 +81,7 @@ function ContactForm() {
           />
         </label>
 
-        <label className={styles.label}>
+        <label className={`${styles.label} animate-on-scroll`} style={{ transitionDelay: '0.4s' }}>
           Email
           <input
             className={styles.input}
@@ -79,7 +92,7 @@ function ContactForm() {
           />
         </label>
 
-        <label className={styles.label}>
+        <label className={`${styles.label} animate-on-scroll`} style={{ transitionDelay: '0.5s' }}>
           Message
           <textarea
             className={styles.textarea}
@@ -89,7 +102,7 @@ function ContactForm() {
           />
         </label>
 
-        <button className="btn-primary" type="submit">
+        <button className="btn-primary animate-on-scroll" type="submit" style={{ transitionDelay: '0.6s' }}>
           Send
         </button>
       </form>

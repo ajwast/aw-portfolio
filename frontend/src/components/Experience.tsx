@@ -1,4 +1,6 @@
 import styles from "./Experience.module.css";
+import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { useEffect } from 'react';
 
 type ExperienceItem = {
   period: string;
@@ -39,21 +41,57 @@ const experienceData: ExperienceItem[] = [
 ];
 
 function Experience() {
+  useScrollAnimation();
+  
+  useEffect(() => {
+    // Trigger initial animation check when component mounts
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.classList.add('visible');
+      }
+    });
+  }, []);
+
   return (
     <section className={styles.section} id="experience">
-      <h2 className={styles.heading}>Education & Experience</h2>
+      <h2 className={`${styles.heading} animate-on-scroll`}>Education & Experience</h2>
 
-      <div className={styles.timeline}>
+      <div className={`${styles.timeline} animate-on-scroll`}>
         {experienceData.map((item, index) => (
-          <div key={index} className={styles.item}>
-            <div className={styles.period}>{item.period}</div>
+          <div 
+            key={index} 
+            className={`${styles.item} animate-on-scroll`}
+            style={{ transitionDelay: `${0.1 * index}s` }}
+          >
+            <div 
+              className={`${styles.period} animate-on-scroll`} 
+              style={{ transitionDelay: `${0.1 * index + 0.1}s` }}
+            >
+              {item.period}
+            </div>
 
-            <div className={styles.content}>
-              <h3 className={styles.title}>{item.title}</h3>
+            <div className={`${styles.content} animate-on-scroll`} style={{ transitionDelay: `${0.1 * index + 0.2}s` }}>
+              <h3 
+                className={`${styles.title} animate-on-scroll`} 
+                style={{ transitionDelay: `${0.1 * index + 0.3}s` }}
+              >
+                {item.title}
+              </h3>
 
-              <p className={styles.org}>{item.organisation}</p>
+              <p 
+                className={`${styles.org} animate-on-scroll`} 
+                style={{ transitionDelay: `${0.1 * index + 0.4}s` }}
+              >
+                {item.organisation}
+              </p>
 
-              <p className={styles.desc}>{item.description}</p>
+              <p 
+                className={`${styles.desc} animate-on-scroll`} 
+                style={{ transitionDelay: `${0.1 * index + 0.5}s` }}
+              >
+                {item.description}
+              </p>
             </div>
           </div>
         ))}

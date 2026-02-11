@@ -46,3 +46,18 @@
   border: 1px solid var(--border);
   background: #000;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .card {
+    padding: var(--spacing-md);
+  }
+  
+  .image {
+    height: 150px;
+  }
+  
+  .title {
+    font-size: var(--font-size-lg);
+  }
+}

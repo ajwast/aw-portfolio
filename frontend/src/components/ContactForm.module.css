@@ -59,3 +59,30 @@
   text-align: center;
   color: var(--accent);
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .section {
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-lg);
+  }
+  
+  .heading {
+    font-size: var(--font-size-lg);
+  }
+  
+  .form {
+    gap: var(--spacing-md);
+  }
+  
+  .label {
+    font-size: var(--font-size-sm);
+    gap: var(--spacing-xs);
+  }
+  
+  .input,
+  .textarea {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+  }
+}

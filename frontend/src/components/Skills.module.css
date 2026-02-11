@@ -15,6 +15,33 @@
   gap: var(--spacing-xl);
 }
 
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .groups {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: var(--spacing-lg);
+  }
+  
+  .heading {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .group {
+    padding: var(--spacing-md);
+  }
+  
+  .group h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .skill {
+    font-size: var(--font-size-xs);
+    padding: calc(var(--spacing-xs) * 0.5) var(--spacing-sm);
+  }
+}
+
 .group {
   background: var(--bg-card);
   border: 1px solid var(--border);

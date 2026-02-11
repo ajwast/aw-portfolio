@@ -1,4 +1,6 @@
 import styles from "./Skills.module.css";
+import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { useEffect } from 'react';
 
 type SkillGroup = {
   title: string;
@@ -33,18 +35,40 @@ const skillGroups: SkillGroup[] = [
 ];
 
 function Skills() {
+  useScrollAnimation();
+  
+  useEffect(() => {
+    // Trigger initial animation check when component mounts
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.classList.add('visible');
+      }
+    });
+  }, []);
+
   return (
     <section className={styles.section} id="skills">
-      <h2 className={styles.heading}>Skills</h2>
+      <h2 className={`${styles.heading} animate-on-scroll`}>Skills</h2>
 
-      <div className={styles.groups}>
-        {skillGroups.map((group) => (
-          <div key={group.title} className={styles.group}>
-            <h3>{group.title}</h3>
+      <div className={`${styles.groups} animate-on-scroll`}>
+        {skillGroups.map((group, groupIndex) => (
+          <div 
+            key={group.title} 
+            className={`${styles.group} animate-on-scroll`}
+            style={{ transitionDelay: `${0.1 * groupIndex}s` }}
+          >
+            <h3 className="animate-on-scroll" style={{ transitionDelay: `${0.1 * groupIndex + 0.1}s` }}>
+              {group.title}
+            </h3>
 
-            <div className={styles.list}>
-              {group.skills.map((skill) => (
-                <span key={skill} className={styles.skill}>
+            <div className={`${styles.list} animate-on-scroll`} style={{ transitionDelay: `${0.1 * groupIndex + 0.2}s` }}>
+              {group.skills.map((skill, skillIndex) => (
+                <span 
+                  key={skill} 
+                  className={`${styles.skill} animate-on-scroll`}
+                  style={{ transitionDelay: `${0.1 * groupIndex + 0.3 + (skillIndex * 0.02)}s` }}
+                >
                   {skill}
                 </span>
               ))}

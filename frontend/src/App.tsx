@@ -6,6 +6,9 @@ import Skills from "./components/Skills";
 import Experience from "./components/Experience";
 import ProjectCard from "./components/ProjectCard";
 import ContactForm from "./components/Contact";
+import ScrollIndicator from "./components/ScrollIndicator";
+import { useScrollToSection } from "./utils/useScrollToSection";
+import { useScrollAnimation } from "./utils/useScrollAnimation";
 
 import DsApp from "./assets/DS-UI.png";
 import DsDaw from "./assets/DS-DAW.png";
@@ -28,9 +31,8 @@ function App() {
   const projectsRef = useRef<HTMLElement | null>(null);
   const contactRef = useRef<HTMLElement | null>(null);
 
-  function scrollTo(ref: React.RefObject<HTMLElement | null>) {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-  }
+  const [scrollToSection, activeSection] = useScrollToSection();
+  useScrollAnimation();
 
   const [projects] = useState<Project[]>([
     {
@@ -65,23 +67,36 @@ function App() {
 
   return (
     <div>
+      <ScrollIndicator />
       <Header
         name="Alex Wastnidge"
         title="Creative Technologist / Developer"
-        onSkillsClick={() => scrollTo(skillsRef)}
-        onExpClick={() => scrollTo(expRef)}
-        onAboutClick={() => scrollTo(aboutRef)}
-        onProjectsClick={() => scrollTo(projectsRef)}
-        onContactClick={() => scrollTo(contactRef)}
+        onSkillsClick={() => scrollToSection(skillsRef)}
+        onExpClick={() => scrollToSection(expRef)}
+        onAboutClick={() => scrollToSection(aboutRef)}
+        onProjectsClick={() => scrollToSection(projectsRef)}
+        onContactClick={() => scrollToSection(contactRef)}
+        activeSection={activeSection}
       />
 
-      <main>
+      <main role="main">
         <Hero />
 
+        {/* About toggle */}
+        <button
+          className="btn-secondary animate-on-scroll"
+          aria-expanded={showAbout}
+          aria-controls="about"
+          onClick={() => setShowAbout(!showAbout)}
+          style={{ transitionDelay: '0.1s' }}
+        >
+          {showAbout ? "Hide" : "Show"} About
+        </button>
+
         {showAbout && (
-          <section ref={aboutRef} id="about">
-            <h2>About Me</h2>
-            <p>
+          <section ref={aboutRef} id="about" tabIndex={-1} className="animate-on-scroll" aria-labelledby="about-heading">
+            <h2 id="about-heading" className="animate-on-scroll" style={{ transitionDelay: '0.2s' }}>About Me</h2>
+            <p className="animate-on-scroll" style={{ transitionDelay: '0.3s' }}>
               I'm a developer and creative technologist working with music,
               code, and interactive systems. I have a background in Music
               Production, Audio Engineering, Audio Programming and Education. I
@@ -93,27 +108,20 @@ function App() {
             </p>
           </section>
         )}
-        <button
-          className="btn-secondary"
-          aria-expanded={showAbout}
-          onClick={() => setShowAbout(!showAbout)}
-        >
-          {showAbout ? "Hide" : "Show"} About
-        </button>
 
-        <section ref={skillsRef} id="skills">
+        <section ref={skillsRef} id="skills" tabIndex={-1} aria-labelledby="skills-heading">
           <Skills />
         </section>
 
-        <section ref={expRef} id="experience">
+        <section ref={expRef} id="experience" tabIndex={-1} aria-labelledby="experience-heading">
           <Experience />
         </section>
 
         {/* Projects */}
-        <section ref={projectsRef} id="projects">
-          <h2>Projects</h2>
+        <section ref={projectsRef} id="projects" tabIndex={-1} aria-labelledby="projects-heading">
+          <h2 id="projects-heading" className="animate-on-scroll" style={{ transitionDelay: '0.1s' }}>Projects</h2>
 
-          <div className="projects-grid">
+          <div className="projects-grid animate-on-scroll" style={{ transitionDelay: '0.2s' }}>
             {projects.map((project, index) => (
               <ProjectCard key={project.title} project={project} />
             ))}
@@ -121,7 +129,7 @@ function App() {
         </section>
 
         {/* Contact */}
-        <section ref={contactRef} id="contact">
+        <section ref={contactRef} id="contact" tabIndex={-1} aria-labelledby="contact-heading">
           <ContactForm />
         </section>
       </main>

@@ -30,42 +30,42 @@ function Header({
         </div>
 
         <nav className={styles.nav}>
-          <button 
-            className={`${styles.navButton} ${activeSection === 'skills' ? styles.active : ''}`} 
-            onClick={onSkillsClick}
-            aria-current={activeSection === 'skills' ? 'page' : undefined}
-          >
-            Skills
-          </button>
-
-          <button 
-            className={`${styles.navButton} ${activeSection === 'experience' ? styles.active : ''}`} 
-            onClick={onExpClick}
-            aria-current={activeSection === 'experience' ? 'page' : undefined}
-          >
-            Experience
-          </button>
-
-          <button 
-            className={`${styles.navButton} ${activeSection === 'about' ? styles.active : ''}`} 
+          <button
+            className={`${styles.navButton} ${activeSection === "about" ? styles.active : ""}`}
             onClick={onAboutClick}
-            aria-current={activeSection === 'about' ? 'page' : undefined}
+            aria-current={activeSection === "about" ? "page" : undefined}
           >
             About
           </button>
 
-          <button 
-            className={`${styles.navButton} ${activeSection === 'projects' ? styles.active : ''}`} 
+          <button
+            className={`${styles.navButton} ${activeSection === "skills" ? styles.active : ""}`}
+            onClick={onSkillsClick}
+            aria-current={activeSection === "skills" ? "page" : undefined}
+          >
+            Skills
+          </button>
+
+          <button
+            className={`${styles.navButton} ${activeSection === "experience" ? styles.active : ""}`}
+            onClick={onExpClick}
+            aria-current={activeSection === "experience" ? "page" : undefined}
+          >
+            Experience
+          </button>
+
+          <button
+            className={`${styles.navButton} ${activeSection === "projects" ? styles.active : ""}`}
             onClick={onProjectsClick}
-            aria-current={activeSection === 'projects' ? 'page' : undefined}
+            aria-current={activeSection === "projects" ? "page" : undefined}
           >
             Projects
           </button>
 
-          <button 
-            className={`${styles.navButton} ${activeSection === 'contact' ? styles.active : ''}`} 
+          <button
+            className={`${styles.navButton} ${activeSection === "contact" ? styles.active : ""}`}
             onClick={onContactClick}
-            aria-current={activeSection === 'contact' ? 'page' : undefined}
+            aria-current={activeSection === "contact" ? "page" : undefined}
           >
             Contact
           </button>

@@ -1,7 +1,7 @@
 export function Contact() {
   return (
-    <div>
-      <h2>CONTACT</h2>
+    <div className="text-blue-50">
+      <h2>Get in Touch</h2>
       <div>
         <form action="">
           <label htmlFor=""></label>

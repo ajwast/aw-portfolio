@@ -1,12 +1,17 @@
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { Home } from "./routes/home";
+import { Outlet } from "react-router-dom";
+import backgroundImg from "./assets/pinkbg.jpg";
 function App() {
   return (
-    <div>
+    <div className="max-w-screen m-auto flex flex-col min-h-screen">
       <Header />
-      <main className="bg-gray-900">
-        <Home />
+      <main
+        className="w-full grow bg-cover bg-center
+                       flex justify-center items-center"
+        style={{ backgroundImage: `url(${backgroundImg})` }}
+      >
+        <Outlet />
       </main>
       <Footer />
     </div>

@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap");
+@import url("https://googleapis.com");
 @import "tailwindcss";
 
 @theme {
-  --font-rubik: "Rubik Dirt", sans-serif;
+  --font-jost: "Jost", sans-serif;
 }

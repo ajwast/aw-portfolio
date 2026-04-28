@@ -8,7 +8,7 @@ function App() {
       <Header />
       <main
         className="w-full grow bg-cover bg-center
-                       flex justify-center items-center"
+                       flex flex-col items-center"
         style={{ backgroundImage: `url(${backgroundImg})` }}
       >
         <Outlet />

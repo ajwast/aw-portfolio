@@ -6,7 +6,6 @@ export async function getProjects(req: Request, res: Response) {
     const allProjects = await projectService.getAllProjects();
     res.json(allProjects);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch" });
   }
 }

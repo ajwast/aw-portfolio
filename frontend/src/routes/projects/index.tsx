@@ -13,15 +13,21 @@ export function Projects() {
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     async function getProjects() {
-      if (!projects.length) {
-        console.log("fetching...");
-        const res = await fetch("http://localhost:3001/api/projects");
-        const data = await res.json();
-        console.log(data);
-        setProjects(data);
-        return;
-      } else {
-        return;
+      try {
+        if (!projects.length) {
+          console.log("fetching...");
+          const res = await fetch("http://localhost:3001/api/projects");
+          const data = await res.json();
+          console.log(data);
+          if (typeof data === "object" && data.length) {
+            setProjects(data);
+            return;
+          }
+        } else {
+          return;
+        }
+      } catch {
+        setProjects([]);
       }
     }
     getProjects();

@@ -2,9 +2,9 @@ import profileImage from "../assets/profile.jpg";
 
 export function About() {
   return (
-    <div className=" text-blue-50 bg-gray-900 font-jost p-3 opacity-90">
+    <div className=" text-blue-50 bg-gray-900 font-jost p-3 opacity-90 mb-3">
       <h2 className="text-3xl font-jost tracking-wider mt-3 mb-4 animate-fade-in-up border-b">
-        About Me
+        ABOUT ME
       </h2>
       <div className="flex justify-evenly">
         <p className=" text-xl pe-5 tracking-wide">

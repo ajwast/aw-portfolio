@@ -8,7 +8,7 @@ interface ButtonProps {
 export function LinkButton({ url, label }: ButtonProps) {
   return (
     <Link
-      className="bg-blue-50 text-jost font-semibold hover:bg-black hover:text-blue-50 hover:scale-110 duration-100 text-black px-4 py-2 opacity-80"
+      className="inline-block bg-white text-gray-900 font-jost font-bold px-8 py-2.5 rounded-full hover:bg-rose-500 hover:text-white transition-all duration-300 active:scale-95 text-center shadow-lg hover:shadow-rose-500/40 w-full md:w-auto uppercase tracking-wider text-sm"
       to={url}
     >
       {label}

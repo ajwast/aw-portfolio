@@ -1,3 +1,6 @@
+import { Section } from "./UI/Section";
+import { SectionHeading } from "./UI/SectionHeading";
+
 type ExperienceItem = {
   period: string;
   title: string;
@@ -37,29 +40,35 @@ const experienceData: ExperienceItem[] = [
 
 export function Experience() {
   return (
-    <div className="font-jost bg-gray-900 text-blue-50 p-3 opacity-90">
-      <h2 className="text-3xl font-jost tracking-wider mt-3 mb-4 animate-fade-in-up border-b">
-        EXPERIENCE & EDUCATION
-      </h2>
+    <Section>
+      <SectionHeading>EXPERIENCE & EDUCATION</SectionHeading>
 
-      <div className="flex flex-col justify-center items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {experienceData.map((item, index) => (
           <div
             key={index}
-            className=" bg-blue-50 text-gray-900 mb-5 rounded-2xl p-5 mx-2 w-1/2"
+            className="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-white/10 transition-colors duration-300 group"
           >
-            <div className="italic text-xs">{item.period}</div>
+            <div className="text-rose-400 text-sm font-medium mb-2 opacity-80 group-hover:opacity-100">
+              {item.period}
+            </div>
 
             <div className="">
-              <h3 className="text-xl font-semibold border-b">{item.title}</h3>
+              <h3 className="text-xl font-bold text-white mb-1">
+                {item.title}
+              </h3>
 
-              <p className="font-semibold mb-3">{item.organisation}</p>
+              <p className="text-rose-200/80 font-semibold mb-3">
+                {item.organisation}
+              </p>
 
-              <p className="">{item.description}</p>
+              <p className="text-white/60 leading-relaxed text-sm">
+                {item.description}
+              </p>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

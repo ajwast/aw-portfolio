@@ -4,10 +4,8 @@ import { Skills } from "../../components/Skills";
 
 export function AboutSection() {
   return (
-    <div className="w-2/3 max-w-7xl animate-fade-in-up font-jost">
-      <h1 className="text-4xl font-bold text-blue-50 bg-gray-900 mt-3 mb-4 p-3 opacity-90 tracking-wider">
-        ALEX WASTNIDGE
-      </h1>
+    <div className="w-full max-w-7xl px-4 md:px-8 animate-fade-in-up font-jost py-8">
+      <div className="mb-8"></div>
       <About />
       <Skills />
       <Experience />

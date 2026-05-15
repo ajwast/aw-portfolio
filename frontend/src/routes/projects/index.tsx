@@ -18,9 +18,11 @@ export function Projects() {
   useEffect(() => {
     async function getProjects() {
       try {
-        const res = await fetch("http://localhost:3001/api/projects");
+        const res = await fetch(
+          "https://aw-portfolio-api.onrender.com/api/projects",
+        );
         const data = await res.json();
-        
+
         if (Array.isArray(data)) {
           setProjects(data);
         }
@@ -31,7 +33,7 @@ export function Projects() {
         setIsLoading(false);
       }
     }
-    
+
     getProjects();
   }, []);
 
@@ -39,10 +41,12 @@ export function Projects() {
     <div className="w-full max-w-7xl px-4 py-8">
       <Section className="bg-transparent shadow-none p-0 md:p-0 mb-0">
         <SectionHeading>PROJECTS</SectionHeading>
-        
+
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="text-rose-400/50 animate-pulse text-xl">Loading amazing things...</div>
+            <div className="text-rose-400/50 animate-pulse text-xl">
+              Loading amazing things...
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -57,7 +61,7 @@ export function Projects() {
             ))}
           </div>
         )}
-        
+
         {!isLoading && projects.length === 0 && (
           <div className="text-center py-20 text-blue-50/40 italic">
             No projects found. Check back soon!

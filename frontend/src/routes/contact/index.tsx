@@ -6,11 +6,12 @@ type FormData = {
   message: string;
 };
 
-function ContactForm() {
+export function ContactForm() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
   });
 
-    const [submitted, setSubmitted] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+}

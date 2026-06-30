@@ -40,3 +40,8 @@ model Project {
   image       String
   link        String
 }
+
+model User{
+  username String @id
+  password String
+}

@@ -1,13 +1,6 @@
 import "dotenv/config";
 import prisma from "../db/prisma";
-
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  link: string;
-  image: string;
-}
+import { Project, ProjectIn } from "../models/interfaces";
 
 export async function getAllProjects() {
   return prisma.project.findMany();
@@ -17,10 +10,9 @@ export async function getOneProject(id: number) {
   return prisma.project.findFirst({ where: { projectId: id } });
 }
 
-export async function createProject(project: Project) {
+export async function createProject(project: ProjectIn) {
   return prisma.project.create({
     data: {
-      projectId: project.id,
       name: project.name,
       description: project.description,
       link: project.link,

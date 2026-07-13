@@ -34,7 +34,7 @@ model PostTag {
 }
 
 model Project {
-  projectId   Int    @id
+  projectId   Int    @id @default(autoincrement())
   name        String
   description String
   image       String

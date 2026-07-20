@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as postController from "../controllers/postController";
+import { checkAdmin } from "../models/utils";
 
 const router = Router();
 

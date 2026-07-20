@@ -44,4 +44,6 @@ model Project {
 model User{
   username String @id
   password String
+  salt String
+  role Int
 }

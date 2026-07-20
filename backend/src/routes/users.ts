@@ -9,6 +9,6 @@ router.post("/", userController.createUser);
 
 router.post("/login", userController.login);
 
-router.delete("/", userController.deleteUser);
+router.delete("/", checkAdmin, userController.deleteUser);
 
 export default router;

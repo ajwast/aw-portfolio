@@ -10,7 +10,8 @@ export function Header() {
       <nav className="flex gap-3">
         <NavButton url="/" label="Home" />
         <NavButton url="/about" label="About" />
-        <NavButton url="/blog" label="Blog" />
+        <NavButton url="/projects" label="Projects" />
+        {/* <NavButton url="/blog" label="Blog" /> */}
       </nav>
     </header>
   );

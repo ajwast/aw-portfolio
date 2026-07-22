@@ -25,7 +25,7 @@ export function Hero() {
 
       <div className="flex flex-wrap justify-center gap-6">
         <LinkButton label="About Me" url="/about" />
-        <LinkButton label="Contact" url="/contact" />
+        {/* <LinkButton label="Contact" url="/contact" /> */}
         <LinkButton label="Projects" url="/projects" />
       </div>
     </div>

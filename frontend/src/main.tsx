@@ -7,6 +7,7 @@ import { Home } from "./routes/home";
 import { Blog } from "./routes/blog";
 import { AboutSection } from "./routes/about/index.tsx";
 import { Projects } from "./routes/projects/index.tsx";
+import { AdminPanel } from "./routes/admin/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/projects",
         element: <Projects />,
+      },
+      {
+        path: "/admin",
+        element: <AdminPanel />,
       },
     ],
   },

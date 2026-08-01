@@ -38,3 +38,28 @@ export async function deleteProject(projectId: number) {
     where: { projectId },
   });
 }
+
+export async function getProjectsByTag(tagId: number) {
+  return prisma.projectTag.findMany({
+    where: { tagId: tagId },
+    include: {
+      tag: {
+        select: { name: true },
+      },
+      project: {
+        select: { name: true },
+      },
+    },
+  });
+}
+
+export async function getTagsonProject(projectId: number) {
+  return prisma.projectTag.findMany({
+    where: { projectId: projectId },
+    include: {
+      tag: {
+        select: { name: true },
+      },
+    },
+  });
+}

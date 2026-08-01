@@ -46,3 +46,32 @@ export async function deleteProject(req: Request, res: Response) {
     res.status(500).json({ error: "Server error" });
   }
 }
+
+//Tag related functions
+
+export async function getProjectsByTag(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const result = await projectService.getProjectsByTag(Number(id));
+    if (result) {
+      return res.json(result);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+export async function getTagsonProject(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const result = await projectService.getTagsonProject(Number(id));
+    if (result) {
+      const tags = result.map((item) => item.tag.name);
+      return res.json(tags);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+}

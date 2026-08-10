@@ -60,6 +60,9 @@ export async function getTagsonProject(projectId: number) {
       tag: {
         select: { name: true },
       },
+      project: {
+        select: { name: true },
+      },
     },
   });
 }

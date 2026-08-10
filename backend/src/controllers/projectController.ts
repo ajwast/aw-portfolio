@@ -54,7 +54,9 @@ export async function getProjectsByTag(req: Request, res: Response) {
     const { id } = req.params;
     const result = await projectService.getProjectsByTag(Number(id));
     if (result) {
-      return res.json(result);
+      const tag = result.map((item) => item.tag.name);
+      const projects = result.map((item) => item.project.name);
+      return res.json({ tag: tag[0], projects });
     }
   } catch (error) {
     console.log(error);
@@ -67,8 +69,9 @@ export async function getTagsonProject(req: Request, res: Response) {
     const { id } = req.params;
     const result = await projectService.getTagsonProject(Number(id));
     if (result) {
+      const project = result.map((item) => item.project.name);
       const tags = result.map((item) => item.tag.name);
-      return res.json(tags);
+      return res.json({ project: project[0], tags });
     }
   } catch (error) {
     console.log(error);

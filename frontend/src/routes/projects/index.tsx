@@ -4,7 +4,7 @@ import { Section } from "../../components/UI/Section";
 import { SectionHeading } from "../../components/UI/SectionHeading";
 
 interface Project {
-  id: number;
+  projectId: number;
   name: string;
   description: string;
   link: string;
@@ -15,6 +15,7 @@ export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch projects
   useEffect(() => {
     async function getProjects() {
       try {
@@ -44,7 +45,10 @@ export function Projects() {
 
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="text-rose-400/50 animate-pulse text-xl">
+            <div
+              className="text-rose-400/50 animate-pulse text-xl"
+              key={"waiting"}
+            >
               Loading amazing things...
             </div>
           </div>
@@ -52,7 +56,7 @@ export function Projects() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((proj, index) => (
               <div
-                key={proj.id}
+                key={proj.projectId}
                 className="animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >

@@ -32,7 +32,6 @@ export function Blog() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        setIsLoading(true);
         const res = await fetch("https://aw-portfolio-api.onrender.com/api/posts");
         if (!res.ok) {
           throw new Error(`Failed to fetch posts (${res.status})`);

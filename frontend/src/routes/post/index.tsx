@@ -31,7 +31,6 @@ export function Post() {
   useEffect(() => {
     async function fetchPost() {
       try {
-        setIsLoading(true);
         setError(null);
         const res = await fetch(
           `https://aw-portfolio-api.onrender.com/api/posts/${slug}`

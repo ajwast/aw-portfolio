@@ -53,7 +53,7 @@ export function Admin({ token, onLogout }: AdminProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Form states for Post creation / editing
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
@@ -109,7 +109,7 @@ export function Admin({ token, onLogout }: AdminProps) {
     setSelectedTagIds([]);
   };
 
-  // Fetch functions
+  // Fetch functions for re-fetching after actions
   const fetchProjects = async () => {
     try {
       const res = await fetch(
@@ -145,7 +145,6 @@ export function Admin({ token, onLogout }: AdminProps) {
         const data = await res.json();
         setTags(Array.isArray(data) ? data : []);
       } else {
-        // Fallback endpoint if /api/tags not yet deployed
         const fallbackRes = await fetch(
           "https://aw-portfolio-api.onrender.com/api/posts/tags",
         );
@@ -160,10 +159,41 @@ export function Admin({ token, onLogout }: AdminProps) {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    Promise.all([fetchProjects(), fetchPosts(), fetchTags()]).finally(() =>
-      setIsLoading(false),
-    );
+    let ignore = false;
+
+    async function loadAdminData() {
+      try {
+        const [projRes, postRes, tagRes] = await Promise.all([
+          fetch("https://aw-portfolio-api.onrender.com/api/projects"),
+          fetch("https://aw-portfolio-api.onrender.com/api/posts"),
+          fetch("https://aw-portfolio-api.onrender.com/api/tags").then((r) =>
+            r.ok ? r : fetch("https://aw-portfolio-api.onrender.com/api/posts/tags")
+          ),
+        ]);
+
+        const projData = projRes.ok ? await projRes.json() : [];
+        const postData = postRes.ok ? await postRes.json() : [];
+        const tagData = tagRes.ok ? await tagRes.json() : [];
+
+        if (!ignore) {
+          setProjects(Array.isArray(projData) ? projData : []);
+          setPosts(Array.isArray(postData) ? postData : []);
+          setTags(Array.isArray(tagData) ? tagData : []);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.error("Error loading admin data:", err);
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadAdminData();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   // Handlers for Projects

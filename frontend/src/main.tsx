@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { Home } from "./routes/home";
 import { Blog } from "./routes/blog";
+import { Post } from "./routes/post";
 import { AboutSection } from "./routes/about/index.tsx";
 import { Projects } from "./routes/projects/index.tsx";
 import { AdminPanel } from "./routes/admin/index.tsx";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog />,
+      },
+      {
+        path: "/blog/:slug",
+        element: <Post />,
       },
       {
         path: "/projects",

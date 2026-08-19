@@ -1,5 +1,5 @@
 import { Login } from "../../components/Login";
-import { Admin } from "../../components/Admin"; // Uncommented this
+import { Admin } from "../../components/Admin";
 import { useState } from "react";
 
 export function AdminPanel() {
@@ -7,11 +7,10 @@ export function AdminPanel() {
 
   const handleLogin = (incomingData: string): void => {
     setToken(incomingData);
-    console.log("Token stored in Parent:", incomingData);
   };
 
   const handleLogout = (): void => {
-    setToken(""); // Simple logout function by wiping state
+    setToken(""); //logout function by wiping state
   };
 
   // Conditional rendering layout rule

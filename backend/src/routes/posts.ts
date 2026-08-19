@@ -4,10 +4,18 @@ import { checkAdmin } from "../models/utils";
 
 const router = Router();
 
+// Public post endpoints
 router.get("/", postController.getPosts);
+router.get("/tags", postController.getTags);
 router.get("/:slug", postController.getPost);
 
-router.post("/", (req, res) => {});
-router.delete("/", (req, res) => {});
+// Admin protected endpoints
+router.post("/", checkAdmin, postController.createPost);
+router.delete("/:id", checkAdmin, postController.deletePost);
+
+// Tag management
+router.post("/tags", checkAdmin, postController.createTag);
+router.delete("/tags/:id", checkAdmin, postController.deleteTag);
 
 export default router;
+

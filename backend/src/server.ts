@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import postRoutes from "./routes/posts";
 import projectRouter from "./routes/projects";
 import userRouter from "./routes/users";
+import tagRouter from "./routes/tags";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(cors());
 
 app.use("/api/posts", postRoutes);
 app.use("/api/projects", projectRouter);
+app.use("/api/tags", tagRouter);
 app.use("/api/user", userRouter);
 
 app.get("/api/status", (req: Request, res: Response) => {

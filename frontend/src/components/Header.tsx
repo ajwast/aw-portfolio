@@ -11,7 +11,7 @@ export function Header() {
         <NavButton url="/" label="Home" />
         <NavButton url="/about" label="About" />
         <NavButton url="/projects" label="Projects" />
-        {/* <NavButton url="/blog" label="Blog" /> */}
+        <NavButton url="/blog" label="Blog" />
       </nav>
     </header>
   );

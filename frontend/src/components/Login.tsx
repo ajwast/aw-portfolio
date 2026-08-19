@@ -6,7 +6,7 @@ import { SectionHeading } from "./UI/SectionHeading";
 interface LoginProp {
   onLogin: (incomingData: string) => void;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 export function Login({ onLogin }: LoginProp) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,16 +21,13 @@ export function Login({ onLogin }: LoginProp) {
     const password = formData.get("password");
 
     try {
-      const response = await fetch(
-        "https://aw-portfolio-api.onrender.com/api/user/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
+      const response = await fetch(`${API_BASE_URL}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ username, password }),
+      });
 
       if (!response.ok) {
         throw new Error("Invalid credentials or server error");
@@ -64,7 +61,10 @@ export function Login({ onLogin }: LoginProp) {
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-white/80 mb-1">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-white/80 mb-1"
+            >
               Username
             </label>
             <input
@@ -77,7 +77,10 @@ export function Login({ onLogin }: LoginProp) {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-white/80 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-white/80 mb-1"
+            >
               Password
             </label>
             <input

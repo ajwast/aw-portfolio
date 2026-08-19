@@ -40,6 +40,8 @@ interface Post {
   tags?: PostTag[];
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 export function Admin({ token, onLogout }: AdminProps) {
   const [activeTab, setActiveTab] = useState<"projects" | "posts" | "tags">(
     "projects",
@@ -112,9 +114,7 @@ export function Admin({ token, onLogout }: AdminProps) {
   // Fetch functions for re-fetching after actions
   const fetchProjects = async () => {
     try {
-      const res = await fetch(
-        "https://aw-portfolio-api.onrender.com/api/projects",
-      );
+      const res = await fetch(`${API_BASE_URL}/projects`);
       if (res.ok) {
         const data = await res.json();
         setProjects(Array.isArray(data) ? data : []);
@@ -126,9 +126,7 @@ export function Admin({ token, onLogout }: AdminProps) {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(
-        "https://aw-portfolio-api.onrender.com/api/posts",
-      );
+      const res = await fetch(`${API_BASE_URL}/posts`);
       if (res.ok) {
         const data = await res.json();
         setPosts(Array.isArray(data) ? data : []);
@@ -140,14 +138,12 @@ export function Admin({ token, onLogout }: AdminProps) {
 
   const fetchTags = async () => {
     try {
-      const res = await fetch("https://aw-portfolio-api.onrender.com/api/tags");
+      const res = await fetch(`${API_BASE_URL}/tags`);
       if (res.ok) {
         const data = await res.json();
         setTags(Array.isArray(data) ? data : []);
       } else {
-        const fallbackRes = await fetch(
-          "https://aw-portfolio-api.onrender.com/api/posts/tags",
-        );
+        const fallbackRes = await fetch(`${API_BASE_URL}/posts/tags`);
         if (fallbackRes.ok) {
           const fallbackData = await fallbackRes.json();
           setTags(Array.isArray(fallbackData) ? fallbackData : []);
@@ -164,10 +160,10 @@ export function Admin({ token, onLogout }: AdminProps) {
     async function loadAdminData() {
       try {
         const [projRes, postRes, tagRes] = await Promise.all([
-          fetch("https://aw-portfolio-api.onrender.com/api/projects"),
-          fetch("https://aw-portfolio-api.onrender.com/api/posts"),
-          fetch("https://aw-portfolio-api.onrender.com/api/tags").then((r) =>
-            r.ok ? r : fetch("https://aw-portfolio-api.onrender.com/api/posts/tags")
+          fetch(`${API_BASE_URL}/projects`),
+          fetch(`${API_BASE_URL}/posts`),
+          fetch(`${API_BASE_URL}/tags`).then((r) =>
+            r.ok ? r : fetch(`${API_BASE_URL}/posts/tags`),
           ),
         ]);
 
@@ -206,17 +202,14 @@ export function Admin({ token, onLogout }: AdminProps) {
     const image = formData.get("image") as string;
 
     try {
-      const res = await fetch(
-        "https://aw-portfolio-api.onrender.com/api/projects",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ name, description, link, image }),
+      const res = await fetch(`${API_BASE_URL}/projects`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({ name, description, link, image }),
+      });
 
       if (!res.ok) throw new Error("Failed to add project");
 
@@ -232,15 +225,12 @@ export function Admin({ token, onLogout }: AdminProps) {
   const handleDeleteProject = async (id: number) => {
     if (!confirm("Are you sure you want to delete this project?")) return;
     try {
-      const res = await fetch(
-        `https://aw-portfolio-api.onrender.com/api/projects/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const res = await fetch(`${API_BASE_URL}/projects/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       if (!res.ok) throw new Error("Failed to delete project");
       showNotify("Project deleted successfully");
       fetchProjects();
@@ -261,8 +251,8 @@ export function Admin({ token, onLogout }: AdminProps) {
     try {
       const isEdit = editingPostId !== null;
       const url = isEdit
-        ? `https://aw-portfolio-api.onrender.com/api/posts/${editingPostId}`
-        : "https://aw-portfolio-api.onrender.com/api/posts";
+        ? `${API_BASE_URL}/posts/${editingPostId}`
+        : `${API_BASE_URL}/posts`;
       const method = isEdit ? "PATCH" : "POST";
 
       const res = await fetch(url, {
@@ -282,7 +272,9 @@ export function Admin({ token, onLogout }: AdminProps) {
       });
 
       if (!res.ok)
-        throw new Error(isEdit ? "Failed to update post" : "Failed to create post");
+        throw new Error(
+          isEdit ? "Failed to update post" : "Failed to create post",
+        );
 
       showNotify(
         isEdit
@@ -300,15 +292,12 @@ export function Admin({ token, onLogout }: AdminProps) {
   const handleDeletePost = async (id: number) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return;
     try {
-      const res = await fetch(
-        `https://aw-portfolio-api.onrender.com/api/posts/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const res = await fetch(`${API_BASE_URL}/posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       if (!res.ok) throw new Error("Failed to delete post");
       showNotify("Blog post deleted successfully");
       fetchPosts();
@@ -328,7 +317,7 @@ export function Admin({ token, onLogout }: AdminProps) {
     if (!newTagName.trim()) return;
 
     try {
-      let res = await fetch("https://aw-portfolio-api.onrender.com/api/tags", {
+      let res = await fetch(`${API_BASE_URL}/tags`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -339,17 +328,14 @@ export function Admin({ token, onLogout }: AdminProps) {
 
       if (!res.ok) {
         // Fallback endpoint
-        res = await fetch(
-          "https://aw-portfolio-api.onrender.com/api/posts/tags",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ name: newTagName.trim() }),
+        res = await fetch(`${API_BASE_URL}/posts/tags`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+          body: JSON.stringify({ name: newTagName.trim() }),
+        });
       }
 
       if (!res.ok) throw new Error("Failed to create tag");
@@ -366,17 +352,14 @@ export function Admin({ token, onLogout }: AdminProps) {
   const handleUpdateTag = async (id: number, name: string) => {
     if (!name.trim()) return;
     try {
-      const res = await fetch(
-        `https://aw-portfolio-api.onrender.com/api/tags/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ name: name.trim() }),
+      const res = await fetch(`${API_BASE_URL}/tags/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({ name: name.trim() }),
+      });
 
       if (!res.ok) throw new Error("Failed to update tag");
 
@@ -397,27 +380,21 @@ export function Admin({ token, onLogout }: AdminProps) {
     )
       return;
     try {
-      let res = await fetch(
-        `https://aw-portfolio-api.onrender.com/api/tags/${id}`,
-        {
+      let res = await fetch(`${API_BASE_URL}/tags/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        // Fallback endpoint
+        res = await fetch(`${API_BASE_URL}/posts/tags/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-      );
-
-      if (!res.ok) {
-        // Fallback endpoint
-        res = await fetch(
-          `https://aw-portfolio-api.onrender.com/api/posts/tags/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        });
       }
 
       if (!res.ok) throw new Error("Failed to delete tag");
@@ -632,7 +609,11 @@ export function Admin({ token, onLogout }: AdminProps) {
           {/* Add / Edit Blog Post Form */}
           <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
             <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-3 flex justify-between items-center">
-              <span>{editingPostId !== null ? `Edit Post #${editingPostId}` : "Create Blog Post"}</span>
+              <span>
+                {editingPostId !== null
+                  ? `Edit Post #${editingPostId}`
+                  : "Create Blog Post"}
+              </span>
               {editingPostId !== null && (
                 <span className="text-xs bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-normal">
                   Editing
@@ -744,7 +725,9 @@ export function Admin({ token, onLogout }: AdminProps) {
                   type="submit"
                   className="mt-2 flex-grow bg-white text-gray-900 font-bold py-2.5 rounded-full hover:bg-rose-500 hover:text-white transition-all duration-300 shadow-md uppercase tracking-wider text-xs"
                 >
-                  {editingPostId !== null ? "Update Post" : "Create & Save Post"}
+                  {editingPostId !== null
+                    ? "Update Post"
+                    : "Create & Save Post"}
                 </button>
                 {editingPostId !== null && (
                   <button

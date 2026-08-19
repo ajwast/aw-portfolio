@@ -11,6 +11,8 @@ interface Project {
   image: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,9 +21,7 @@ export function Projects() {
   useEffect(() => {
     async function getProjects() {
       try {
-        const res = await fetch(
-          "https://aw-portfolio-api.onrender.com/api/projects",
-        );
+        const res = await fetch(`${API_BASE_URL}/projects`);
         const data = await res.json();
 
         if (Array.isArray(data)) {

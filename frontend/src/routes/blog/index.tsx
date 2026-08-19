@@ -23,7 +23,7 @@ interface Post {
   createdAt: string;
   tags?: PostTag[];
 }
-
+// const API_BASE_URL = import.meta.env.VITE_API_URL;
 export function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +32,9 @@ export function Blog() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch("https://aw-portfolio-api.onrender.com/api/posts");
+        const res = await fetch(
+          "https://aw-portfolio-api.onrender.com/api/posts",
+        );
         if (!res.ok) {
           throw new Error(`Failed to fetch posts (${res.status})`);
         }
@@ -139,4 +141,3 @@ export function Blog() {
     </div>
   );
 }
-

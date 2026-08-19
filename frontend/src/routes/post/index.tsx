@@ -21,6 +21,7 @@ interface Post {
   createdAt: string;
   tags?: PostTag[];
 }
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export function Post() {
   const { slug } = useParams();
@@ -32,9 +33,7 @@ export function Post() {
     async function fetchPost() {
       try {
         setError(null);
-        const res = await fetch(
-          `https://aw-portfolio-api.onrender.com/api/posts/${slug}`
-        );
+        const res = await fetch(`${API_BASE_URL}/posts/${slug}`);
         if (!res.ok) {
           throw new Error("Post not found");
         }
@@ -70,12 +69,19 @@ export function Post() {
           to="/blog"
           className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-300 font-semibold mb-6 transition-colors group"
         >
-          <span className="transition-transform group-hover:-translate-x-1">←</span> Back to Blog
+          <span className="transition-transform group-hover:-translate-x-1">
+            ←
+          </span>{" "}
+          Back to Blog
         </Link>
         <Section>
           <div className="text-center py-12 text-blue-50/70">
-            <h2 className="text-2xl font-bold text-white mb-4">Post Not Found</h2>
-            <p className="mb-6">{error || "The post you are looking for does not exist."}</p>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Post Not Found
+            </h2>
+            <p className="mb-6">
+              {error || "The post you are looking for does not exist."}
+            </p>
             <Link
               to="/blog"
               className="inline-block bg-white text-gray-900 font-bold px-6 py-2 rounded-full hover:bg-rose-500 hover:text-white transition-all duration-300 shadow-md"
@@ -102,7 +108,10 @@ export function Post() {
         to="/blog"
         className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-300 font-semibold mb-6 transition-colors group text-sm md:text-base"
       >
-        <span className="transition-transform group-hover:-translate-x-1">←</span> Back to Blog
+        <span className="transition-transform group-hover:-translate-x-1">
+          ←
+        </span>{" "}
+        Back to Blog
       </Link>
 
       <Section className="bg-gray-900/90 border border-white/10 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-md">
@@ -220,11 +229,13 @@ export function Post() {
             to="/blog"
             className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-300 font-semibold transition-colors group text-sm md:text-base"
           >
-            <span className="transition-transform group-hover:-translate-x-1">←</span> Back to all posts
+            <span className="transition-transform group-hover:-translate-x-1">
+              ←
+            </span>{" "}
+            Back to all posts
           </Link>
         </div>
       </Section>
     </div>
   );
 }
-

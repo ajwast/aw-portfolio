@@ -9,7 +9,7 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <h2
-      className={`text-3xl md:text-4xl font-jost tracking-wider mt-2 mb-8 animate-fade-in-up border-b bg-gray-900 p-3  pb-2 ${className}`}
+      className={`text-3xl md:text-4xl font-bold text-white font-jost tracking-wide mt-2 mb-8 animate-fade-in-up border-b border-white/10 pb-3 ${className}`}
     >
       {children}
     </h2>

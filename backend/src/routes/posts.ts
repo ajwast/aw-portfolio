@@ -11,6 +11,8 @@ router.get("/:slug", postController.getPost);
 
 // Admin protected endpoints
 router.post("/", checkAdmin, postController.createPost);
+router.patch("/:id", checkAdmin, postController.updatePost);
+router.put("/:id", checkAdmin, postController.updatePost);
 router.delete("/:id", checkAdmin, postController.deletePost);
 
 // Tag management

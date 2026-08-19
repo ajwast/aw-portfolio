@@ -71,6 +71,49 @@ export async function deletePost(id: number) {
   });
 }
 
+export async function updatePost(
+  id: number,
+  data: {
+    title?: string;
+    slug?: string;
+    excerpt?: string;
+    content?: string;
+    published?: boolean;
+    tagIds?: number[];
+  }
+) {
+  const { title, slug, excerpt, content, published, tagIds } = data;
+
+  if (Array.isArray(tagIds)) {
+    await prisma.postTag.deleteMany({ where: { postId: id } });
+  }
+
+  return prisma.post.update({
+    where: { id },
+    data: {
+      ...(title && { title }),
+      ...(slug && { slug }),
+      ...(excerpt !== undefined && { excerpt: excerpt || null }),
+      ...(content && { content }),
+      ...(published !== undefined && { published }),
+      ...(Array.isArray(tagIds) && {
+        tags: {
+          create: tagIds.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      }),
+    },
+    include: {
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+    },
+  });
+}
+
 export async function getAllTags() {
   return prisma.tag.findMany({
     include: {

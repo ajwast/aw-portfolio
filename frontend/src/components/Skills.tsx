@@ -53,7 +53,7 @@ export function Skills() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {skillGroups.map((group) => (
           <div key={group.title} className="flex flex-col">
-            <h3 className="text-xl font-bold text-white/90 mb-4 border-b border-white/10 pb-2">
+            <h3 className="text-xl font-bold text-rose-300 mb-4 border-b border-white/10 pb-2 font-jost">
               {group.title}
             </h3>
 
@@ -61,7 +61,7 @@ export function Skills() {
               {group.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="bg-white/5 text-white/90 border border-white/10 px-3 py-1 rounded-full text-sm hover:bg-rose-500/20 hover:text-rose-300 transition-all duration-200 cursor-default"
+                  className="bg-gray-800 text-blue-50/90 border border-gray-700 px-3 py-1 rounded-full text-xs font-medium hover:bg-rose-500/20 hover:text-rose-300 transition-all duration-200 cursor-default"
                 >
                   {skill}
                 </span>

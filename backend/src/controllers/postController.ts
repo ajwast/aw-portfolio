@@ -61,6 +61,34 @@ export async function deletePost(req: Request<{ id: string }>, res: Response) {
   }
 }
 
+export async function updatePost(req: Request<{ id: string }>, res: Response) {
+  try {
+    const { id } = req.params;
+    const { title, slug, excerpt, content, published, tagIds } = req.body;
+    const updatePayload: {
+      title?: string;
+      slug?: string;
+      excerpt?: string;
+      content?: string;
+      published?: boolean;
+      tagIds?: number[];
+    } = {};
+
+    if (typeof title === "string") updatePayload.title = title;
+    if (typeof slug === "string") updatePayload.slug = slug;
+    if (typeof excerpt === "string") updatePayload.excerpt = excerpt;
+    if (typeof content === "string") updatePayload.content = content;
+    if (published !== undefined) updatePayload.published = Boolean(published);
+    if (Array.isArray(tagIds)) updatePayload.tagIds = tagIds.map(Number);
+
+    const updatedPost = await postService.updatePost(Number(id), updatePayload);
+    res.json({ message: "Post updated successfully", post: updatedPost });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update post" });
+  }
+}
+
 export async function getTags(req: Request, res: Response) {
   try {
     const tags = await tagService.getAllTags();

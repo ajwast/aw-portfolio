@@ -64,11 +64,11 @@ export function Blog() {
             </div>
           </div>
         ) : error ? (
-          <div className="text-center py-16 text-rose-400/80 bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="text-center py-16 text-rose-400/80 bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg">
             <p className="text-lg">{error}</p>
           </div>
         ) : posts.length === 0 ? (
-          <div className="text-center py-20 text-blue-50/50 italic bg-white/5 border border-white/10 rounded-2xl">
+          <div className="text-center py-20 text-blue-50/50 italic bg-gray-900 border border-gray-800 rounded-2xl shadow-lg">
             No blog posts found yet. Check back soon!
           </div>
         ) : (
@@ -85,7 +85,7 @@ export function Blog() {
               return (
                 <article
                   key={post.id}
-                  className="bg-white/5 border border-white/10 p-6 md:p-8 rounded-2xl hover:bg-white/10 transition-all duration-300 group shadow-xl backdrop-blur-sm flex flex-col justify-between animate-fade-in-up"
+                  className="bg-gray-900 border border-gray-800 p-6 md:p-8 rounded-2xl hover:border-gray-700 transition-all duration-300 group shadow-lg flex flex-col justify-between animate-fade-in-up"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <div>
@@ -101,7 +101,7 @@ export function Blog() {
                           {post.tags.map((t) => (
                             <span
                               key={t.tag.id || t.tag.name}
-                              className="bg-white/5 text-white/80 border border-white/10 px-2.5 py-0.5 rounded-full text-xs font-medium"
+                              className="bg-gray-800 text-blue-50/90 border border-gray-700 px-2.5 py-0.5 rounded-full text-xs font-medium"
                             >
                               {t.tag.name}
                             </span>
@@ -117,13 +117,13 @@ export function Blog() {
                     </Link>
 
                     {post.excerpt && (
-                      <p className="text-white/70 text-sm md:text-base leading-relaxed mb-6 line-clamp-3">
+                      <p className="text-blue-50/80 text-sm md:text-base leading-relaxed mb-6 line-clamp-3">
                         {post.excerpt}
                       </p>
                     )}
                   </div>
 
-                  <div className="pt-4 border-t border-white/5 mt-4">
+                  <div className="pt-4 border-t border-gray-800 mt-4">
                     <Link
                       to={`/blog/${post.slug}`}
                       className="inline-flex items-center gap-2 text-rose-400 group-hover:text-rose-300 font-semibold text-sm transition-all duration-300 group-hover:translate-x-1"

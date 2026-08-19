@@ -41,8 +41,13 @@ interface Post {
 }
 
 export function Admin({ token, onLogout }: AdminProps) {
-  const [activeTab, setActiveTab] = useState<"projects" | "posts" | "tags">("projects");
-  const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [activeTab, setActiveTab] = useState<"projects" | "posts" | "tags">(
+    "projects",
+  );
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   // Data states
   const [projects, setProjects] = useState<Project[]>([]);
@@ -50,7 +55,8 @@ export function Admin({ token, onLogout }: AdminProps) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Form states for Post creation
+  // Form states for Post creation / editing
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [postTitle, setPostTitle] = useState("");
   const [postSlug, setPostSlug] = useState("");
   const [postExcerpt, setPostExcerpt] = useState("");
@@ -61,7 +67,10 @@ export function Admin({ token, onLogout }: AdminProps) {
   // Form state for Tag creation
   const [newTagName, setNewTagName] = useState("");
 
-  const showNotify = (message: string, type: "success" | "error" = "success") => {
+  const showNotify = (
+    message: string,
+    type: "success" | "error" = "success",
+  ) => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
   };
@@ -69,19 +78,43 @@ export function Admin({ token, onLogout }: AdminProps) {
   // Helper for slug generation
   const handleTitleChange = (val: string) => {
     setPostTitle(val);
-    const generatedSlug = val
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9 -]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-    setPostSlug(generatedSlug);
+    if (!editingPostId) {
+      const generatedSlug = val
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9 -]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+      setPostSlug(generatedSlug);
+    }
+  };
+
+  const handleStartEditPost = (p: Post) => {
+    setEditingPostId(p.id);
+    setPostTitle(p.title);
+    setPostSlug(p.slug);
+    setPostExcerpt(p.excerpt || "");
+    setPostContent(p.content);
+    setPostPublished(p.published);
+    setSelectedTagIds(p.tags ? p.tags.map((t) => t.tag.id) : []);
+  };
+
+  const handleCancelEditPost = () => {
+    setEditingPostId(null);
+    setPostTitle("");
+    setPostSlug("");
+    setPostExcerpt("");
+    setPostContent("");
+    setPostPublished(true);
+    setSelectedTagIds([]);
   };
 
   // Fetch functions
   const fetchProjects = async () => {
     try {
-      const res = await fetch("https://aw-portfolio-api.onrender.com/api/projects");
+      const res = await fetch(
+        "https://aw-portfolio-api.onrender.com/api/projects",
+      );
       if (res.ok) {
         const data = await res.json();
         setProjects(Array.isArray(data) ? data : []);
@@ -93,7 +126,9 @@ export function Admin({ token, onLogout }: AdminProps) {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch("https://aw-portfolio-api.onrender.com/api/posts");
+      const res = await fetch(
+        "https://aw-portfolio-api.onrender.com/api/posts",
+      );
       if (res.ok) {
         const data = await res.json();
         setPosts(Array.isArray(data) ? data : []);
@@ -111,7 +146,9 @@ export function Admin({ token, onLogout }: AdminProps) {
         setTags(Array.isArray(data) ? data : []);
       } else {
         // Fallback endpoint if /api/tags not yet deployed
-        const fallbackRes = await fetch("https://aw-portfolio-api.onrender.com/api/posts/tags");
+        const fallbackRes = await fetch(
+          "https://aw-portfolio-api.onrender.com/api/posts/tags",
+        );
         if (fallbackRes.ok) {
           const fallbackData = await fallbackRes.json();
           setTags(Array.isArray(fallbackData) ? fallbackData : []);
@@ -124,7 +161,9 @@ export function Admin({ token, onLogout }: AdminProps) {
 
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([fetchProjects(), fetchPosts(), fetchTags()]).finally(() => setIsLoading(false));
+    Promise.all([fetchProjects(), fetchPosts(), fetchTags()]).finally(() =>
+      setIsLoading(false),
+    );
   }, []);
 
   // Handlers for Projects
@@ -137,14 +176,17 @@ export function Admin({ token, onLogout }: AdminProps) {
     const image = formData.get("image") as string;
 
     try {
-      const res = await fetch("https://aw-portfolio-api.onrender.com/api/projects", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        "https://aw-portfolio-api.onrender.com/api/projects",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name, description, link, image }),
         },
-        body: JSON.stringify({ name, description, link, image }),
-      });
+      );
 
       if (!res.ok) throw new Error("Failed to add project");
 
@@ -160,12 +202,15 @@ export function Admin({ token, onLogout }: AdminProps) {
   const handleDeleteProject = async (id: number) => {
     if (!confirm("Are you sure you want to delete this project?")) return;
     try {
-      const res = await fetch(`https://aw-portfolio-api.onrender.com/api/projects/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `https://aw-portfolio-api.onrender.com/api/projects/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (!res.ok) throw new Error("Failed to delete project");
       showNotify("Project deleted successfully");
       fetchProjects();
@@ -184,8 +229,14 @@ export function Admin({ token, onLogout }: AdminProps) {
     }
 
     try {
-      const res = await fetch("https://aw-portfolio-api.onrender.com/api/posts", {
-        method: "POST",
+      const isEdit = editingPostId !== null;
+      const url = isEdit
+        ? `https://aw-portfolio-api.onrender.com/api/posts/${editingPostId}`
+        : "https://aw-portfolio-api.onrender.com/api/posts";
+      const method = isEdit ? "PATCH" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -200,30 +251,34 @@ export function Admin({ token, onLogout }: AdminProps) {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to create post");
+      if (!res.ok)
+        throw new Error(isEdit ? "Failed to update post" : "Failed to create post");
 
-      showNotify("Blog post published successfully!");
-      setPostTitle("");
-      setPostSlug("");
-      setPostExcerpt("");
-      setPostContent("");
-      setSelectedTagIds([]);
+      showNotify(
+        isEdit
+          ? "Blog post updated successfully!"
+          : "Blog post published successfully!",
+      );
+      handleCancelEditPost();
       fetchPosts();
     } catch (err) {
       console.error(err);
-      showNotify("Error creating post. Verify API endpoint/auth.", "error");
+      showNotify("Error saving post. Verify API endpoint/auth.", "error");
     }
   };
 
   const handleDeletePost = async (id: number) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return;
     try {
-      const res = await fetch(`https://aw-portfolio-api.onrender.com/api/posts/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `https://aw-portfolio-api.onrender.com/api/posts/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (!res.ok) throw new Error("Failed to delete post");
       showNotify("Blog post deleted successfully");
       fetchPosts();
@@ -254,14 +309,17 @@ export function Admin({ token, onLogout }: AdminProps) {
 
       if (!res.ok) {
         // Fallback endpoint
-        res = await fetch("https://aw-portfolio-api.onrender.com/api/posts/tags", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        res = await fetch(
+          "https://aw-portfolio-api.onrender.com/api/posts/tags",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ name: newTagName.trim() }),
           },
-          body: JSON.stringify({ name: newTagName.trim() }),
-        });
+        );
       }
 
       if (!res.ok) throw new Error("Failed to create tag");
@@ -278,14 +336,17 @@ export function Admin({ token, onLogout }: AdminProps) {
   const handleUpdateTag = async (id: number, name: string) => {
     if (!name.trim()) return;
     try {
-      const res = await fetch(`https://aw-portfolio-api.onrender.com/api/tags/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `https://aw-portfolio-api.onrender.com/api/tags/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name: name.trim() }),
         },
-        body: JSON.stringify({ name: name.trim() }),
-      });
+      );
 
       if (!res.ok) throw new Error("Failed to update tag");
 
@@ -299,23 +360,34 @@ export function Admin({ token, onLogout }: AdminProps) {
   };
 
   const handleDeleteTag = async (id: number) => {
-    if (!confirm("Delete this tag? It will be removed from all associated posts and projects.")) return;
+    if (
+      !confirm(
+        "Delete this tag? It will be removed from all associated posts and projects.",
+      )
+    )
+      return;
     try {
-      let res = await fetch(`https://aw-portfolio-api.onrender.com/api/tags/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        // Fallback endpoint
-        res = await fetch(`https://aw-portfolio-api.onrender.com/api/posts/tags/${id}`, {
+      let res = await fetch(
+        `https://aw-portfolio-api.onrender.com/api/tags/${id}`,
+        {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
+        },
+      );
+
+      if (!res.ok) {
+        // Fallback endpoint
+        res = await fetch(
+          `https://aw-portfolio-api.onrender.com/api/posts/tags/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
       }
 
       if (!res.ok) throw new Error("Failed to delete tag");
@@ -329,7 +401,9 @@ export function Admin({ token, onLogout }: AdminProps) {
 
   const toggleTagSelection = (tagId: number) => {
     setSelectedTagIds((prev) =>
-      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
+      prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId],
     );
   };
 
@@ -337,7 +411,9 @@ export function Admin({ token, onLogout }: AdminProps) {
     <Section className="w-full max-w-7xl mx-auto font-jost">
       {/* Admin Header */}
       <div className="flex flex-wrap justify-between items-center mb-8 border-b border-white/10 pb-4">
-        <SectionHeading className="mb-0 border-b-0 pb-0">ADMIN PANEL</SectionHeading>
+        <SectionHeading className="mb-0 border-b-0 pb-0">
+          ADMIN PANEL
+        </SectionHeading>
         <button
           onClick={onLogout}
           className="bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500 hover:text-white px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-md"
@@ -407,9 +483,14 @@ export function Admin({ token, onLogout }: AdminProps) {
             <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-3">
               Add New Project
             </h3>
-            <form onSubmit={handleProjectSubmit} className="flex flex-col gap-4">
+            <form
+              onSubmit={handleProjectSubmit}
+              className="flex flex-col gap-4"
+            >
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Project Name</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Project Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -420,7 +501,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Description</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Description
+                </label>
                 <textarea
                   name="description"
                   required
@@ -431,7 +514,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Project Link / URL</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Project Link / URL
+                </label>
                 <input
                   type="url"
                   name="link"
@@ -442,7 +527,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Image Asset Name / URL</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Image Asset Name / URL
+                </label>
                 <input
                   type="text"
                   name="image"
@@ -463,7 +550,9 @@ export function Admin({ token, onLogout }: AdminProps) {
 
           {/* Project List */}
           <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-xl font-bold text-white mb-4">Existing Projects</h3>
+            <h3 className="text-xl font-bold text-white mb-4">
+              Existing Projects
+            </h3>
             {projects.length === 0 ? (
               <div className="text-white/50 italic py-8 text-center bg-white/5 border border-white/10 rounded-2xl">
                 No projects added yet.
@@ -476,8 +565,12 @@ export function Admin({ token, onLogout }: AdminProps) {
                     className="bg-white/5 border border-white/10 p-5 rounded-xl flex flex-col justify-between hover:bg-white/10 transition-all duration-200"
                   >
                     <div>
-                      <h4 className="font-bold text-white text-lg mb-1">{proj.name}</h4>
-                      <p className="text-white/70 text-xs mb-3 line-clamp-2">{proj.description}</p>
+                      <h4 className="font-bold text-white text-lg mb-1">
+                        {proj.name}
+                      </h4>
+                      <p className="text-white/70 text-xs mb-3 line-clamp-2">
+                        {proj.description}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center pt-3 border-t border-white/5 mt-2">
                       <a
@@ -506,14 +599,21 @@ export function Admin({ token, onLogout }: AdminProps) {
       {/* TAB 2: BLOG POSTS */}
       {activeTab === "posts" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Add Blog Post Form */}
+          {/* Add / Edit Blog Post Form */}
           <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
-            <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-3">
-              Create Blog Post
+            <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-3 flex justify-between items-center">
+              <span>{editingPostId !== null ? `Edit Post #${editingPostId}` : "Create Blog Post"}</span>
+              {editingPostId !== null && (
+                <span className="text-xs bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-normal">
+                  Editing
+                </span>
+              )}
             </h3>
             <form onSubmit={handlePostSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Title</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Title
+                </label>
                 <input
                   type="text"
                   value={postTitle}
@@ -525,7 +625,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">URL Slug</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  URL Slug
+                </label>
                 <input
                   type="text"
                   value={postSlug}
@@ -537,7 +639,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Excerpt (Summary)</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Excerpt (Summary)
+                </label>
                 <textarea
                   value={postExcerpt}
                   onChange={(e) => setPostExcerpt(e.target.value)}
@@ -548,7 +652,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Content (Markdown)</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Content (Markdown)
+                </label>
                 <textarea
                   value={postContent}
                   onChange={(e) => setPostContent(e.target.value)}
@@ -562,7 +668,9 @@ export function Admin({ token, onLogout }: AdminProps) {
               {/* Tag Selector */}
               {tags.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-white/80 mb-2">Select Tags</label>
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    Select Tags
+                  </label>
                   <div className="flex flex-wrap gap-1.5 p-2 bg-gray-950/50 rounded-xl border border-white/10 max-h-32 overflow-y-auto">
                     {tags.map((tag) => {
                       const isSelected = selectedTagIds.includes(tag.id);
@@ -593,23 +701,39 @@ export function Admin({ token, onLogout }: AdminProps) {
                   onChange={(e) => setPostPublished(e.target.checked)}
                   className="rounded border-white/20 text-rose-500 focus:ring-rose-400 h-4 w-4 bg-gray-950"
                 />
-                <label htmlFor="publishedToggle" className="text-sm font-medium text-white/90 cursor-pointer">
+                <label
+                  htmlFor="publishedToggle"
+                  className="text-sm font-medium text-white/90 cursor-pointer"
+                >
                   Publish Post Immediately
                 </label>
               </div>
 
-              <button
-                type="submit"
-                className="mt-2 w-full bg-white text-gray-900 font-bold py-2.5 rounded-full hover:bg-rose-500 hover:text-white transition-all duration-300 shadow-md uppercase tracking-wider text-xs"
-              >
-                Create & Save Post
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="mt-2 flex-grow bg-white text-gray-900 font-bold py-2.5 rounded-full hover:bg-rose-500 hover:text-white transition-all duration-300 shadow-md uppercase tracking-wider text-xs"
+                >
+                  {editingPostId !== null ? "Update Post" : "Create & Save Post"}
+                </button>
+                {editingPostId !== null && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEditPost}
+                    className="mt-2 bg-gray-800 text-white/70 font-semibold px-4 py-2.5 rounded-full hover:bg-gray-700 hover:text-white transition-all text-xs"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </form>
           </div>
 
           {/* Posts List */}
           <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-xl font-bold text-white mb-4">Existing Blog Posts</h3>
+            <h3 className="text-xl font-bold text-white mb-4">
+              Existing Blog Posts
+            </h3>
             {posts.length === 0 ? (
               <div className="text-white/50 italic py-8 text-center bg-white/5 border border-white/10 rounded-2xl">
                 No blog posts created yet.
@@ -623,7 +747,9 @@ export function Admin({ token, onLogout }: AdminProps) {
                   >
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <h4 className="font-bold text-white text-lg">{p.title}</h4>
+                        <h4 className="font-bold text-white text-lg">
+                          {p.title}
+                        </h4>
                         <span
                           className={`text-xs px-2 py-0.5 rounded-full border ${
                             p.published
@@ -635,7 +761,9 @@ export function Admin({ token, onLogout }: AdminProps) {
                         </span>
                       </div>
 
-                      <p className="text-white/50 text-xs font-mono mb-2">/{p.slug}</p>
+                      <p className="text-white/50 text-xs font-mono mb-2">
+                        /{p.slug}
+                      </p>
 
                       {p.tags && p.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -661,6 +789,12 @@ export function Admin({ token, onLogout }: AdminProps) {
                         Preview ↗
                       </a>
                       <button
+                        onClick={() => handleStartEditPost(p)}
+                        className="text-white/90 hover:text-white text-xs font-medium px-3 py-1.5 bg-white/10 rounded-lg border border-white/20 hover:bg-white/20 transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
                         onClick={() => handleDeletePost(p.id)}
                         className="text-rose-400 hover:text-rose-300 text-xs font-medium px-3 py-1.5 bg-rose-500/10 rounded-lg border border-rose-500/20"
                       >
@@ -685,7 +819,9 @@ export function Admin({ token, onLogout }: AdminProps) {
             </h3>
             <form onSubmit={handleTagSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-1">Tag Name</label>
+                <label className="block text-sm font-medium text-white/80 mb-1">
+                  Tag Name
+                </label>
                 <input
                   type="text"
                   value={newTagName}
@@ -726,14 +862,17 @@ export function Admin({ token, onLogout }: AdminProps) {
                           value={editingTagName}
                           onChange={(e) => setEditingTagName(e.target.value)}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") handleUpdateTag(tag.id, editingTagName);
+                            if (e.key === "Enter")
+                              handleUpdateTag(tag.id, editingTagName);
                             if (e.key === "Escape") setEditingTagId(null);
                           }}
                           autoFocus
                           className="bg-gray-900 border border-white/30 text-white text-xs px-2 py-0.5 rounded-full focus:outline-none focus:border-rose-400"
                         />
                         <button
-                          onClick={() => handleUpdateTag(tag.id, editingTagName)}
+                          onClick={() =>
+                            handleUpdateTag(tag.id, editingTagName)
+                          }
                           title="Save tag name"
                           className="text-emerald-400 hover:text-emerald-300 font-bold text-xs"
                         >
@@ -752,7 +891,8 @@ export function Admin({ token, onLogout }: AdminProps) {
                         <span>{tag.name}</span>
                         {tag._count?.posts !== undefined && (
                           <span className="text-[10px] bg-white/10 text-white/60 px-1.5 py-0.5 rounded-full">
-                            {tag._count.posts} {tag._count.posts === 1 ? "post" : "posts"}
+                            {tag._count.posts}{" "}
+                            {tag._count.posts === 1 ? "post" : "posts"}
                           </span>
                         )}
                         <button

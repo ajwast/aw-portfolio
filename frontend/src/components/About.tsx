@@ -8,7 +8,7 @@ export function About() {
       <SectionHeading>ABOUT ME</SectionHeading>
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
         <div className="flex-1">
-          <p className="text-lg md:text-xl leading-relaxed tracking-wide text-blue-50/90">
+          <p className="text-white/80 text-base md:text-lg leading-relaxed font-jost">
             I'm a developer and creative technologist working with music, code,
             and interactive systems. I have a background in Music Production,
             Audio Engineering, Audio Programming and Education. I developed "Deep
@@ -23,7 +23,7 @@ export function About() {
           <img
             src={profileImage}
             alt="Alex Wastnidge"
-            className="rounded-full h-48 w-48 md:h-64 md:w-64 object-cover border-4 border-blue-50/10 shadow-2xl transition-transform duration-500 hover:scale-105"
+            className="rounded-full h-48 w-48 md:h-64 md:w-64 object-cover border-4 border-white/10 shadow-2xl transition-transform duration-500 hover:scale-105"
           />
         </div>
       </div>

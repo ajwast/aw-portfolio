@@ -47,22 +47,22 @@ export function Experience() {
         {experienceData.map((item, index) => (
           <div
             key={index}
-            className="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-white/10 transition-colors duration-300 group"
+            className="bg-gray-800/80 border border-gray-700/80 p-6 rounded-xl hover:border-gray-600 transition-all duration-300 group shadow-md"
           >
-            <div className="text-rose-400 text-sm font-medium mb-2 opacity-80 group-hover:opacity-100">
+            <div className="text-rose-400 text-sm font-semibold tracking-wide uppercase mb-2">
               {item.period}
             </div>
 
-            <div className="">
-              <h3 className="text-xl font-bold text-white mb-1">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-1 font-jost">
                 {item.title}
               </h3>
 
-              <p className="text-rose-200/80 font-semibold mb-3">
+              <p className="text-rose-200/90 font-semibold mb-3 text-sm md:text-base">
                 {item.organisation}
               </p>
 
-              <p className="text-white/60 leading-relaxed text-sm">
+              <p className="text-white/80 leading-relaxed text-sm md:text-base font-jost">
                 {item.description}
               </p>
             </div>

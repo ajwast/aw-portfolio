@@ -9,6 +9,7 @@ import { Post } from "./routes/post";
 import { AboutSection } from "./routes/about/index.tsx";
 import { Projects } from "./routes/projects/index.tsx";
 import { AdminPanel } from "./routes/admin/index.tsx";
+import { ContactForm } from "./routes/contact/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <AdminPanel />,
       },
+      { path: "/contact", element: <ContactForm /> },
     ],
   },
 ]);

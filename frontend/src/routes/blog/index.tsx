@@ -55,7 +55,7 @@ export function Blog() {
 
   return (
     <div className="w-full max-w-7xl px-4 md:px-8 py-8 font-jost animate-fade-in-up">
-      <Section className="bg-transparent shadow-none p-0 md:p-0 mb-0">
+      <Section className="shadow-none p-0 md:p-0 mb-0">
         <SectionHeading>BLOG</SectionHeading>
 
         {isLoading ? (
@@ -86,7 +86,7 @@ export function Blog() {
               return (
                 <article
                   key={post.id}
-                  className="bg-gray-900 border border-gray-800 p-6 md:p-8 rounded-2xl hover:border-gray-700 transition-all duration-300 group shadow-lg flex flex-col justify-between animate-fade-in-up"
+                  className="bg-gray-800 border border-gray-800 p-6 md:p-8 rounded-2xl hover:border-gray-700 transition-all duration-300 group shadow-lg flex flex-col justify-between animate-fade-in-up"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <div>

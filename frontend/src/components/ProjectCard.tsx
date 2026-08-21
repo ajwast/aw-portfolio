@@ -20,7 +20,7 @@ export function ProjectCard({ project }: { project: Project }) {
   const projectImage = imageMap[project.name] || project.image;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 flex flex-col p-6 rounded-2xl hover:border-gray-700 transition-all duration-300 group shadow-lg h-full">
+    <div className="bg-gray-800 border border-gray-900 flex flex-col p-6 rounded-2xl hover:border-gray-700 transition-all duration-300 group shadow-lg h-full">
       <div className="relative h-48 w-full overflow-hidden rounded-xl mb-6 bg-gray-800">
         <img
           src={projectImage}

@@ -8,7 +8,7 @@ interface ButtonProps {
 export function NavButton({ url, label }: ButtonProps) {
   return (
     <Link
-      className="text-blue-50/70 hover:text-blue-50 font-medium tracking-wide transition-all duration-300 relative group py-1"
+      className="text-blue-50/70 hover:text-blue-50 font-medium tracking-wide transition-all duration-300 relative group py-1 px-3"
       to={url}
     >
       {label}

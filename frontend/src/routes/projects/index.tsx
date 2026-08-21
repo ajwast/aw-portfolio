@@ -40,7 +40,7 @@ export function Projects() {
 
   return (
     <div className="w-full max-w-7xl px-4 py-8">
-      <Section className="bg-transparent shadow-none p-0 md:p-0 mb-0">
+      <Section className="shadow-none p-0 md:p-0 mb-0">
         <SectionHeading>PROJECTS</SectionHeading>
 
         {isLoading ? (
@@ -49,7 +49,7 @@ export function Projects() {
               className="text-rose-400/50 animate-pulse text-xl"
               key={"waiting"}
             >
-              Loading amazing things...
+              Loading projects...
             </div>
           </div>
         ) : (

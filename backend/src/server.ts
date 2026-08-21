@@ -7,6 +7,7 @@ import postRoutes from "./routes/posts";
 import projectRouter from "./routes/projects";
 import userRouter from "./routes/users";
 import tagRouter from "./routes/tags";
+import contactRouter from "./routes/contact";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(cors());
 app.use("/api/posts", postRoutes);
 app.use("/api/projects", projectRouter);
 app.use("/api/tags", tagRouter);
+app.use("/api/contact", contactRouter);
 app.use("/api/user", userRouter);
 
 app.get("/api/status", (req: Request, res: Response) => {

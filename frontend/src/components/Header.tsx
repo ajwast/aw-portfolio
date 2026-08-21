@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { NavButton } from "./UI/NavButton";
-import { RxHamburgerMenu, RxCross2 } from "react-icons/rx"; // Added RxCross2 for a close icon
+import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { useState } from "react";
 
 export function Header() {

@@ -1,14 +1,7 @@
 import { Request, Response } from "express";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-// Configure Nodemailer Transport
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_KEY);
 
 export async function handleContact(req: Request, res: Response) {
   const { name, email, message } = req.body;
@@ -19,23 +12,21 @@ export async function handleContact(req: Request, res: Response) {
       .status(400)
       .json({ success: false, error: "Missing required fields" });
   }
-  console.log("Validation passed");
-  const mailInfo = {
-    from: process.env.EMAIL_USER,
-    to: process.env.RECEIVER_EMAIL,
+
+  const contactEmail: string = process.env.CONTACT_EMAIL || "";
+
+  const { data, error } = await resend.emails.send({
+    from: "Contact Form <onboarding@resend.dev>",
+    to: contactEmail,
+    subject: `Contact Form from ${email}`,
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     replyTo: email,
-    subject: `New Contact Form Submission from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-  };
-
-  transporter.sendMail(mailInfo, (error, info) => {
-    if (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Failed to send email" });
-    }
-
-    res
-      .status(200)
-      .json({ message: "Email sent successfully!", success: true });
   });
+
+  if (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Email not sent successfully" });
+  }
+  console.log(data);
+  res.status(200).json({ message: "Email sent successfully!", success: true });
 }

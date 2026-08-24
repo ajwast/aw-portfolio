@@ -69,7 +69,7 @@ export function ContactForm() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-xl mb-4 bg-amber-50"
+              className="w-xl mb-4 bg-amber-50 text-black"
             />
           </div>
           <div>
@@ -80,7 +80,7 @@ export function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-xl mb-4 bg-amber-50"
+              className="w-xl mb-4 bg-amber-50 text-black"
             />
           </div>
           <div>
@@ -90,7 +90,7 @@ export function ContactForm() {
               value={formData.message}
               onChange={handleChange}
               required
-              className="w-xl h-20 mb-4 bg-amber-50"
+              className="w-xl h-20 mb-4 bg-amber-50 text-black"
             />
           </div>
           <button

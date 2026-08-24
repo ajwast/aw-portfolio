@@ -19,7 +19,7 @@ export async function handleContact(req: Request, res: Response) {
       .status(400)
       .json({ success: false, error: "Missing required fields" });
   }
-
+  console.log("Validation passed");
   const mailInfo = {
     from: process.env.EMAIL_USER,
     to: process.env.RECEIVER_EMAIL,
@@ -33,6 +33,9 @@ export async function handleContact(req: Request, res: Response) {
       console.error(error);
       return res.status(500).json({ error: "Failed to send email" });
     }
-    res.status(200).json({ message: "Email sent successfully!" });
+
+    res
+      .status(200)
+      .json({ message: "Email sent successfully!", success: true });
   });
 }

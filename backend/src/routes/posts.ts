@@ -20,4 +20,3 @@ router.post("/tags", checkAdmin, postController.createTag);
 router.delete("/tags/:id", checkAdmin, postController.deleteTag);
 
 export default router;
-

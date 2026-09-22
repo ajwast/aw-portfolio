@@ -23,7 +23,7 @@ export async function login(username: string, password: string) {
 }
 
 export async function getUsers() {
-  return prisma.user.findMany({ select: { username: true } });
+  return await prisma.user.findMany({ select: { username: true } });
 }
 
 export async function createUser(username: string, password: string) {
@@ -46,5 +46,5 @@ export async function createUser(username: string, password: string) {
 }
 
 export async function deleteUser(username: any) {
-  return prisma.user.delete({ where: { username } });
+  return await prisma.user.delete({ where: { username } });
 }

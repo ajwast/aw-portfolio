@@ -35,6 +35,11 @@ app.get("/api/status", (req: Request, res: Response) => {
   res.json({ status: "Server Running" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Serving on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Serving on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
+

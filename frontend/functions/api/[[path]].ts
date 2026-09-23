@@ -27,10 +27,11 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       context.waitUntil(
         Promise.all([
           env.KV_CACHE.delete("cache:/api/projects"),
-          env.KV_CACHE.delete("cache:/api/posts"),
+          env.KV_CACHE.delete("cache:/api/posts"), // Clear the main blog list cache
+          env.KV_CACHE.delete(`cache:${url.pathname}`), // Clear this specific post details cache if applicable
         ]),
       );
-      console.log("Admin action detected. Caches purged.");
+      console.log("Admin action detected. Blog caches purged.");
     }
 
     return response;

@@ -6,36 +6,44 @@ interface Env {
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
   const url = new URL(request.url);
-  console.log("Caching function triggered for:", url.pathname);
 
-  // 1. FIX THE DUPLICATION: Strip out the leading '/api' from the incoming path
-  // If url.pathname is "/api/users", cleanPath becomes "/users"
   const cleanPath = url.pathname.replace(/^\/api/, '');
-  
   const backend_origin = env.BACKEND_URL ?? "";
-  // Combines: "https://" + "/users" + "?query=1"
   const backendURL = `${backend_origin}${cleanPath}${url.search}`;
 
-  // 2. Safely handle Non-GET requests (POST, PUT, DELETE, etc.)
+  // 1. HANDLE ADMIN MUTATIONS (POST, PUT, DELETE)
   if (request.method !== "GET") {
-    // Only clone/pass the body if the request method allows a body
     const hasBody = ["POST", "PUT", "PATCH"].includes(request.method);
     
-    return fetch(backendURL, {
+    // Forward the creation/edit request to Render
+    const response = await fetch(backendURL, {
       method: request.method,
       headers: request.headers,
       body: hasBody ? request.body : null,
-      // Cloudflare specific optimization to avoid stream locking issues
-      redirect: "manual" 
+      redirect: "manual"
     });
+
+    // If the Admin's post was successfully created/updated on Render...
+    if (response.ok) {
+      // SECURE EDGE INVALIDATION: Wipe out the main blog lists caches immediately!
+      // You can delete specific keys or list and delete them
+      context.waitUntil(
+        Promise.all([
+          env.KV_CACHE.delete("cache:/api/posts"), // Clear the main blog list cache
+          env.KV_CACHE.delete(`cache:${url.pathname}`) // Clear this specific post details cache if applicable
+        ])
+      );
+      console.log("Admin action detected. Blog caches purged.");
+    }
+
+    return response;
   }
 
+  // 2. HANDLE GET REQUESTS (PUBLIC BLOG READS)
   const cacheKey = `cache:${url.pathname}${url.search}`;
 
   try {
-    // 3. Check KV cache
     const cachedRes = await env.KV_CACHE.get(cacheKey);
-
     if (cachedRes) {
       return new Response(cachedRes, {
         headers: {
@@ -46,33 +54,24 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       });
     }
 
-    // 4. Cache Miss: Fetch from Render backend
-    const response = await fetch(backendURL, {
-      method: "GET",
-      headers: request.headers,
-    });
+    const response = await fetch(backendURL, { method: "GET", headers: request.headers });
 
     if (response.ok) {
       const data = await response.text();
       
-      // 5. OPTIMIZATION: Use waitUntil to make sure the KV write finishes fully 
-      // without delaying the response back to the user's browser.
+      // Increased TTL to 7 Days (604,800 seconds) since changes are rare
       context.waitUntil(
-        env.KV_CACHE.put(cacheKey, data, { expirationTtl: 300 })
+        env.KV_CACHE.put(cacheKey, data, { expirationTtl: 604800 })
       );
 
       const headers = new Headers(response.headers);
       headers.set("X-Cache", "MISS");
       headers.set("Access-Control-Allow-Origin", "*");
 
-      return new Response(data, {
-        status: response.status,
-        headers,
-      });
+      return new Response(data, { status: response.status, headers });
     }
     return response;
   } catch (error) {
-    console.error("KV or Fetch failed:", error);
     return fetch(backendURL, { method: "GET", headers: request.headers });
   }
 };

@@ -6,7 +6,7 @@ interface Env {
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
   const url = new URL(request.url);
-
+  console.log("Caching function");
   const backend_origin = env.BACKEND_URL;
   const backendURL = `${backend_origin}${url.pathname}${url.search}`;
 

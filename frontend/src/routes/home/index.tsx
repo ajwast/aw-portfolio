@@ -6,7 +6,7 @@ export function Home() {
   useEffect(() => {
     async function checkAPI() {
       try {
-        const res = await fetch(`api/status`);
+        const res = await fetch(`/api/status`);
         const data = await res.json();
         console.log(data);
       } catch {

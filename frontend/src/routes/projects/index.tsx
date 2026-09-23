@@ -19,7 +19,7 @@ export function Projects() {
   useEffect(() => {
     async function getProjects() {
       try {
-        const res = await fetch(`api/projects`);
+        const res = await fetch(`/api/projects`);
         const data = await res.json();
 
         if (Array.isArray(data)) {

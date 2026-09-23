@@ -32,7 +32,7 @@ export function Post() {
     async function fetchPost() {
       try {
         setError(null);
-        const res = await fetch(`api/posts/${slug}`);
+        const res = await fetch(`/api/posts/${slug}`);
         if (!res.ok) {
           throw new Error("Post not found");
         }

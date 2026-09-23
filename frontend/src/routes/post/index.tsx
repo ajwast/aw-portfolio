@@ -21,7 +21,6 @@ interface Post {
   createdAt: string;
   tags?: PostTag[];
 }
-const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export function Post() {
   const { slug } = useParams();
@@ -33,7 +32,7 @@ export function Post() {
     async function fetchPost() {
       try {
         setError(null);
-        const res = await fetch(`${API_BASE_URL}/posts/${slug}`);
+        const res = await fetch(`api/posts/${slug}`);
         if (!res.ok) {
           throw new Error("Post not found");
         }
